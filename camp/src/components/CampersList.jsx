@@ -13,7 +13,7 @@ const CampersList = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users/all');
+      const res = await axios.get('https://campregistration-pv9e.onrender.com/api/users/all');
       setUsers(res.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -23,7 +23,7 @@ const CampersList = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this camper?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/users/delete/${id}`);
+      await axios.delete(`https://campregistration-pv9e.onrender.com/api/users/delete/${id}`);
       setUsers(prev => prev.filter(user => user._id !== id));
       alert('Camper deleted successfully!');
     } catch (error) {
@@ -36,7 +36,7 @@ const CampersList = () => {
     try {
       const user = users.find(u => u._id === id);
       const updatedValue = !user[field];
-      await axios.patch(`http://localhost:5000/api/users/update/${id}`, {
+      await axios.patch(`https://campregistration-pv9e.onrender.com/api/users/update/${id}`, {
   [field]: updatedValue
 });
       setUsers(prev => prev.map(u => u._id === id ? { ...u, [field]: updatedValue } : u));
