@@ -121,7 +121,7 @@ const CampersList = () => {
         {filteredUsers.map((user, index) => (
           <div key={index} className="bg-white p-4 rounded shadow border">
             <img
-              src={`http://localhost:5000/uploads/${user.image}`}
+              src={`https://campregistration-pv9e.onrender.com/uploads/${user.image}`}
               alt={user.name}
               className="w-full h-48 object-cover rounded mb-4"
             />
