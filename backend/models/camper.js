@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   school: String,
   image: String, // file path
   remarks: String,
+  payment:Number,
   arrivedForBus: {
     type: Boolean,
     default: false

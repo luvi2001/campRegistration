@@ -14,7 +14,8 @@ const addUser = async (req, res) => {
       team,
       school,
       image,
-      remarks
+      remarks,
+      payment,
     });
 
     await newUser.save();

@@ -132,6 +132,7 @@ const CampersList = () => {
             <p><strong>Team:</strong> {user.team}</p>
             <p><strong>School:</strong> {user.school}</p>
             <p><strong>Remarks:</strong> {user.remarks || 'N/A'}</p>
+            <p><strong>Paid Amount:</strong> {user.payment || 'N/A'}</p>
 
             <div className="flex gap-2 mt-3">
               <button
