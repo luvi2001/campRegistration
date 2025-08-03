@@ -37,8 +37,8 @@ const CampersList = () => {
       const user = users.find(u => u._id === id);
       const updatedValue = !user[field];
       await axios.patch(`https://campregistration-pv9e.onrender.com/api/users/update/${id}`, {
-  [field]: updatedValue
-});
+        [field]: updatedValue
+      });
       setUsers(prev => prev.map(u => u._id === id ? { ...u, [field]: updatedValue } : u));
     } catch (error) {
       console.error('Error updating arrival status:', error);
@@ -50,7 +50,7 @@ const CampersList = () => {
   }, []);
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (user.name || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesArea = areaFilter ? user.area === areaFilter : true;
     const matchesTeam = teamFilter ? user.team === teamFilter : true;
     const matchesBus = busFilter === '' ? true : user.arrivedForBus === (busFilter === 'true');
@@ -58,8 +58,8 @@ const CampersList = () => {
     return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp;
   });
 
-  const uniqueAreas = [...new Set(users.map(user => user.area))];
-  const uniqueTeams = [...new Set(users.map(user => user.team))];
+  const uniqueAreas = [...new Set(users.map(user => user.area).filter(Boolean))];
+  const uniqueTeams = [...new Set(users.map(user => user.team).filter(Boolean))];
 
   const countByField = (field, value) => users.filter(user => user[field] === value).length;
 
@@ -120,20 +120,22 @@ const CampersList = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredUsers.map((user, index) => (
           <div key={index} className="bg-white p-4 rounded shadow border">
-            <img
-              src={`https://campregistration-pv9e.onrender.com/uploads/${user.image}`}
-              alt={user.name}
-              className="w-full h-48 object-cover rounded mb-4"
-            />
-            <h3 className="text-xl font-semibold mb-2">{user.name}</h3>
-            <p><strong>Age:</strong> {user.age}</p>
-            <p><strong>Phone:</strong> {user.phoneNumber}</p>
-            <p><strong>Gender:</strong> {user.gender}</p>
-            <p><strong>Area:</strong> {user.area}</p>
-            <p><strong>Team:</strong> {user.team}</p>
-            <p><strong>School:</strong> {user.school}</p>
+            {user.image && (
+              <img
+                src={`https://campregistration-pv9e.onrender.com/uploads/${user.image}`}
+                alt={user.name}
+                className="w-full h-48 object-cover rounded mb-4"
+              />
+            )}
+            <h3 className="text-xl font-semibold mb-2">{user.name || 'Unnamed Camper'}</h3>
+            <p><strong>Age:</strong> {user.age || 'N/A'}</p>
+            <p><strong>Phone:</strong> {user.phoneNumber || 'N/A'}</p>
+            <p><strong>Gender:</strong> {user.gender || 'N/A'}</p>
+            <p><strong>Area:</strong> {user.area || 'N/A'}</p>
+            <p><strong>Team:</strong> {user.team || 'N/A'}</p>
+            <p><strong>School:</strong> {user.school || 'N/A'}</p>
             <p><strong>Remarks:</strong> {user.remarks || 'N/A'}</p>
-            <p><strong>Paid Amount:</strong> {user.payment || 'N/A'}</p>
+            <p><strong>Paid Amount:</strong> {user.payment ?? 'N/A'}</p>
 
             <div className="flex gap-2 mt-3">
               <button
