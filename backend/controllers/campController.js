@@ -10,6 +10,7 @@ const addUser = async (req, res) => {
       name,
       age,
       phoneNumber,
+      gender,
       area,
       team,
       school,
