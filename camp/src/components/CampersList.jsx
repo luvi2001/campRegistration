@@ -128,6 +128,7 @@ const CampersList = () => {
             <h3 className="text-xl font-semibold mb-2">{user.name}</h3>
             <p><strong>Age:</strong> {user.age}</p>
             <p><strong>Phone:</strong> {user.phoneNumber}</p>
+            <p><strong>Gender:</strong> {user.gender}</p>
             <p><strong>Area:</strong> {user.area}</p>
             <p><strong>Team:</strong> {user.team}</p>
             <p><strong>School:</strong> {user.school}</p>
