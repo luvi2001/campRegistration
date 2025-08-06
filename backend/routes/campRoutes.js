@@ -56,6 +56,22 @@ router.patch('/update/:id', async (req, res) => {
   }
 });
 
+// PUT /api/users/:id
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+    const updates = {
+      ...req.body,
+      image: req.file ? req.file.filename : undefined,
+    };
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, { new: true });
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
 
 
 module.exports = router;
