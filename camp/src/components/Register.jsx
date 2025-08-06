@@ -12,11 +12,12 @@ const RegisterForm = () => {
     name: '',
     age: '',
     phoneNumber: '',
+    gender: '',
     area: '',
     team: '',
     school: '',
     remarks: '',
-    payment:'',
+    payment: '',
     image: null,
   });
 
@@ -31,13 +32,26 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
+
+    const preparedData = {
+      ...formData,
+      age: Number(formData.age),       // keep as Number
+      payment: Number(formData.payment), // keep as Number
+      // phoneNumber stays as string
+    };
+
+    Object.entries(preparedData).forEach(([key, value]) => {
       data.append(key, value);
     });
 
     try {
-      const res = await axios.post('https://campregistration-pv9e.onrender.com/api/users/add', data);
+      const res = await axios.post(
+        'http://localhost:5000/api/users/add'
+,
+        data
+      );
       alert('User added successfully!');
       console.log(res.data);
       navigate('/');
@@ -64,6 +78,7 @@ const RegisterForm = () => {
         >
           <h2 className="text-2xl font-bold mb-6 text-center">Register User</h2>
 
+          {/* Name */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -71,10 +86,11 @@ const RegisterForm = () => {
               name="name"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
+          {/* Age */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Age</label>
             <input
@@ -82,10 +98,11 @@ const RegisterForm = () => {
               name="age"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
+          {/* Phone Number */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Phone Number</label>
             <input
@@ -93,11 +110,40 @@ const RegisterForm = () => {
               name="phoneNumber"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              pattern="\d{10}" // optional: 10-digit phone validation
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
-          {/* Area Dropdown */}
+          {/* Gender */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Gender</label>
+            <div className="flex gap-4">
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  onChange={handleChange}
+                  required
+                  className="mr-2"
+                />
+                Male
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Female
+              </label>
+            </div>
+          </div>
+
+          {/* Area */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Area</label>
             <select
@@ -114,7 +160,7 @@ const RegisterForm = () => {
             </select>
           </div>
 
-          {/* Team Dropdown */}
+          {/* Team */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Team</label>
             <select
@@ -131,6 +177,7 @@ const RegisterForm = () => {
             </select>
           </div>
 
+          {/* School */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">School</label>
             <input
@@ -138,10 +185,11 @@ const RegisterForm = () => {
               name="school"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
 
+          {/* Remarks */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Remarks</label>
             <input
@@ -149,26 +197,29 @@ const RegisterForm = () => {
               name="remarks"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
+
+          {/* Payment */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Payments</label>
+            <label className="block text-sm font-medium mb-1">Payment</label>
             <input
-              type="text"
+              type="number"
               name="payment"
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border border-gray-300 rounded px-3 py-2"
             />
           </div>
+
+          {/* Image */}
           <div className="mb-6">
             <label className="block text-sm font-medium mb-1">Upload Image</label>
             <input
               type="file"
               name="image"
               onChange={handleChange}
-              
               className="w-full"
             />
           </div>

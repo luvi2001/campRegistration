@@ -3,7 +3,18 @@ const User = require('../models/camper');
 // Add a new user
 const addUser = async (req, res) => {
   try {
-    const { name, age, phoneNumber, area, team,school,remarks } = req.body;
+    const {
+      name,
+      age,
+      phoneNumber,
+      gender,
+      area,
+      team,
+      school,
+      remarks,
+      payment
+    } = req.body;
+
     const image = req.file ? req.file.filename : null;
 
     const newUser = new User({
