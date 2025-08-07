@@ -15,7 +15,6 @@ const CampersList = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({});
-  
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
@@ -110,23 +109,16 @@ const CampersList = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-3xl font-bold">Registered Campers</h2>
-<div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
-  {TEAM_OPTIONS.map((team, idx) => {
-    const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
-    return (
-      <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
-        {team}: {count}
-      </span>
-    );
-  })}
-  <span className="bg-green-100 px-3 py-1 rounded">
-    Bus Arrived: {users.filter(user => user.arrivedForBus).length}
-  </span>
-  <span className="bg-blue-100 px-3 py-1 rounded">
-    Camp Arrived: {users.filter(user => user.arrivedCampSite).length}
-  </span>
-</div>
-
+          <div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
+            {TEAM_OPTIONS.map((team, idx) => {
+              const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
+              return (
+                <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
+                  {team}: {count}
+                </span>
+              );
+            })}
+          </div>
         </div>
         <button
           onClick={() => navigate('register')}
@@ -179,32 +171,12 @@ const CampersList = () => {
             <p><strong>Remarks:</strong> {user.remarks || 'N/A'}</p>
             <p><strong>Paid Amount:</strong> {user.payment ?? 'N/A'}</p>
             <div className="flex gap-2 mt-3">
-<button
-  onClick={() => {
-    const confirmMsg = user.arrivedForBus
-      ? 'Mark this camper as NOT arrived for the bus?'
-      : 'Mark this camper as arrived for the bus?';
-    if (window.confirm(confirmMsg)) {
-      toggleArrival(user._id, 'arrivedForBus');
-    }
-  }}
-  className={`px-3 py-1 rounded text-white ${user.arrivedForBus ? 'bg-green-600' : 'bg-gray-600'}`}
->
-  Bus: {user.arrivedForBus ? 'Yes' : 'No'}
-</button>
-<button
-  onClick={() => {
-    const confirmMsg = user.arrivedCampSite
-      ? 'Mark this camper as NOT arrived at the camp site?'
-      : 'Mark this camper as arrived at the camp site?';
-    if (window.confirm(confirmMsg)) {
-      toggleArrival(user._id, 'arrivedCampSite');
-    }
-  }}
-  className={`px-3 py-1 rounded text-white ${user.arrivedCampSite ? 'bg-green-600' : 'bg-gray-600'}`}
->
-  Camp: {user.arrivedCampSite ? 'Yes' : 'No'}
-</button>
+              <button onClick={() => toggleArrival(user._id, 'arrivedForBus')} className={`px-3 py-1 rounded text-white ${user.arrivedForBus ? 'bg-green-600' : 'bg-gray-600'}`}>
+                Bus: {user.arrivedForBus ? 'Yes' : 'No'}
+              </button>
+              <button onClick={() => toggleArrival(user._id, 'arrivedCampSite')} className={`px-3 py-1 rounded text-white ${user.arrivedCampSite ? 'bg-green-600' : 'bg-gray-600'}`}>
+                Camp: {user.arrivedCampSite ? 'Yes' : 'No'}
+              </button>
             </div>
             <button onClick={() => handleDelete(user._id)} className="mt-4 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-300 w-full">
               Delete
