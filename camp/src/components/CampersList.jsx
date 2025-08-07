@@ -15,6 +15,7 @@ const CampersList = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({});
+  const [genderFilter, setGenderFilter] = useState('');
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
@@ -98,12 +99,14 @@ const CampersList = () => {
       : true;
     const matchesBus = busFilter === '' ? true : user.arrivedForBus === (busFilter === 'true');
     const matchesCamp = campFilter === '' ? true : user.arrivedCampSite === (campFilter === 'true');
-    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp;
+    const matchesGender = genderFilter === '' ? true : user.gender === genderFilter;
+    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp && matchesGender;
   });
 
   const uniqueAreas = [...new Set(users.map(user => user.area).filter(Boolean))];
   const countByField = (field, value) => users.filter(user => user[field] === value).length;
-
+  const maleCount = users.filter(user => user.gender === 'Male').length;
+  const femaleCount = users.filter(user => user.gender === 'Female').length;
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
@@ -123,6 +126,12 @@ const CampersList = () => {
   </span>
   <span className="bg-blue-100 px-3 py-1 rounded">
     Camp Arrived: {users.filter(user => user.arrivedCampSite).length}
+  </span>
+    <span className="bg-yellow-100 px-3 py-1 rounded">
+    Male: {maleCount}
+  </span>
+  <span className="bg-pink-100 px-3 py-1 rounded">
+    Female: {femaleCount}
   </span>
 </div>
 
@@ -158,6 +167,12 @@ const CampersList = () => {
           <option value="true">Arrived</option>
           <option value="false">Not Arrived</option>
         </select>
+
+          <select value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)} className="p-2 border rounded">
+    <option value="">Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    </select>
       </div>
 
       {/* Cards */}
@@ -221,6 +236,7 @@ const CampersList = () => {
             <input name="age" type="number" value={formData.age || ''} onChange={handleChange} placeholder="Age" className="w-full mb-2 p-2 border rounded" />
             <input name="phoneNumber" value={formData.phoneNumber || ''} onChange={handleChange} placeholder="Phone" className="w-full mb-2 p-2 border rounded" />
             <input name="school" value={formData.school || ''} onChange={handleChange} placeholder="School" className="w-full mb-2 p-2 border rounded" />
+            <input name="gender"value={formData.gender || ''} onChange={handleChange} placeholder="Gender" className="w-full mb-2 p-2 border rounded" />
             <input name="remarks" value={formData.remarks || ''} onChange={handleChange} placeholder="Remarks" className="w-full mb-2 p-2 border rounded" />
             <input name="team" value={formData.team || ''} onChange={handleChange} placeholder="Team" className="w-full mb-2 p-2 border rounded" />
             <input name="payment" type="number" value={formData.payment || ''} onChange={handleChange} placeholder="Payment" className="w-full mb-2 p-2 border rounded" />
