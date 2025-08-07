@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 
 const TEAM_OPTIONS = ['Volcanoes', 'Gladiators', 'ThunderBolts', 'Vikings'];
+const GENDER_OPTIONS = ['Male', 'Female'];
 
 const CampersList = () => {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,8 @@ const CampersList = () => {
   const [teamFilter, setTeamFilter] = useState('');
   const [busFilter, setBusFilter] = useState('');
   const [campFilter, setCampFilter] = useState('');
+  // New state for gender filter
+  const [genderFilter, setGenderFilter] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({});
@@ -98,11 +101,18 @@ const CampersList = () => {
       : true;
     const matchesBus = busFilter === '' ? true : user.arrivedForBus === (busFilter === 'true');
     const matchesCamp = campFilter === '' ? true : user.arrivedCampSite === (campFilter === 'true');
-    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp;
+    // New filter for gender
+    const matchesGender = genderFilter ? user.gender === genderFilter : true;
+
+    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp && matchesGender;
   });
 
   const uniqueAreas = [...new Set(users.map(user => user.area).filter(Boolean))];
   const countByField = (field, value) => users.filter(user => user[field] === value).length;
+
+  // New counts for Bus and Camp arrivals
+  const busArrivedCount = users.filter(user => user.arrivedForBus).length;
+  const campArrivedCount = users.filter(user => user.arrivedCampSite).length;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -128,8 +138,14 @@ const CampersList = () => {
         </button>
       </div>
 
+      {/* New Counts for Bus and Camp Arrivals */}
+      <div className="flex flex-wrap gap-4 mb-6">
+        <span className="bg-green-100 px-3 py-1 rounded">Bus Arrived: {busArrivedCount}</span>
+        <span className="bg-green-100 px-3 py-1 rounded">Camp Arrived: {campArrivedCount}</span>
+      </div>
+
       {/* Filters */}
-      <div className="grid md:grid-cols-5 gap-4 mb-6">
+      <div className="grid md:grid-cols-6 gap-4 mb-6">
         <input type="text" placeholder="Search by name..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="p-2 border rounded w-full" />
         <select value={areaFilter} onChange={(e) => setAreaFilter(e.target.value)} className="p-2 border rounded">
           <option value="">Area (All: {users.length})</option>
@@ -150,6 +166,13 @@ const CampersList = () => {
           <option value="">Camp Arrival</option>
           <option value="true">Arrived</option>
           <option value="false">Not Arrived</option>
+        </select>
+        {/* New filter for gender */}
+        <select value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)} className="p-2 border rounded">
+          <option value="">Gender</option>
+          {GENDER_OPTIONS.map((gender, idx) => (
+            <option key={idx} value={gender}>{gender} ({countByField('gender', gender)})</option>
+          ))}
         </select>
       </div>
 
