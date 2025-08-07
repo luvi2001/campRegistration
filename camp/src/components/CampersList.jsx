@@ -109,16 +109,23 @@ const CampersList = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-3xl font-bold">Registered Campers</h2>
-          <div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
-            {TEAM_OPTIONS.map((team, idx) => {
-              const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
-              return (
-                <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
-                  {team}: {count}
-                </span>
-              );
-            })}
-          </div>
+<div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
+  {TEAM_OPTIONS.map((team, idx) => {
+    const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
+    return (
+      <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
+        {team}: {count}
+      </span>
+    );
+  })}
+  <span className="bg-green-100 px-3 py-1 rounded">
+    Bus Arrived: {users.filter(user => user.arrivedForBus).length}
+  </span>
+  <span className="bg-blue-100 px-3 py-1 rounded">
+    Camp Arrived: {users.filter(user => user.arrivedCampSite).length}
+  </span>
+</div>
+
         </div>
         <button
           onClick={() => navigate('register')}
