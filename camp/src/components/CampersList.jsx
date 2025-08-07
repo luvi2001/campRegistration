@@ -15,7 +15,6 @@ const CampersList = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({});
-  const [genderFilter, setGenderFilter] = useState('');
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
@@ -99,42 +98,27 @@ const CampersList = () => {
       : true;
     const matchesBus = busFilter === '' ? true : user.arrivedForBus === (busFilter === 'true');
     const matchesCamp = campFilter === '' ? true : user.arrivedCampSite === (campFilter === 'true');
-    const matchesGender = genderFilter === '' ? true : user.gender === genderFilter;
-    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp && matchesGender;
+    return matchesSearch && matchesArea && matchesTeam && matchesBus && matchesCamp;
   });
 
   const uniqueAreas = [...new Set(users.map(user => user.area).filter(Boolean))];
   const countByField = (field, value) => users.filter(user => user[field] === value).length;
-  const maleCount = users.filter(user => user.gender === 'Male').length;
-  const femaleCount = users.filter(user => user.gender === 'Female').length;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-3xl font-bold">Registered Campers</h2>
-<div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
-  {TEAM_OPTIONS.map((team, idx) => {
-    const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
-    return (
-      <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
-        {team}: {count}
-      </span>
-    );
-  })}
-  <span className="bg-green-100 px-3 py-1 rounded">
-    Bus Arrived: {users.filter(user => user.arrivedForBus).length}
-  </span>
-  <span className="bg-blue-100 px-3 py-1 rounded">
-    Camp Arrived: {users.filter(user => user.arrivedCampSite).length}
-  </span>
-    <span className="bg-yellow-100 px-3 py-1 rounded">
-    Male: {maleCount}
-  </span>
-  <span className="bg-pink-100 px-3 py-1 rounded">
-    Female: {femaleCount}
-  </span>
-</div>
-
+          <div className="text-sm md:text-base text-gray-700 flex flex-wrap gap-4 mt-2">
+            {TEAM_OPTIONS.map((team, idx) => {
+              const count = users.filter(user => (user.team || '').toLowerCase() === team.toLowerCase()).length;
+              return (
+                <span key={idx} className="bg-gray-100 px-3 py-1 rounded">
+                  {team}: {count}
+                </span>
+              );
+            })}
+          </div>
         </div>
         <button
           onClick={() => navigate('register')}
@@ -167,12 +151,6 @@ const CampersList = () => {
           <option value="true">Arrived</option>
           <option value="false">Not Arrived</option>
         </select>
-
-          <select value={genderFilter} onChange={(e) => setGenderFilter(e.target.value)} className="p-2 border rounded">
-    <option value="">Gender</option>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    </select>
       </div>
 
       {/* Cards */}
@@ -193,32 +171,12 @@ const CampersList = () => {
             <p><strong>Remarks:</strong> {user.remarks || 'N/A'}</p>
             <p><strong>Paid Amount:</strong> {user.payment ?? 'N/A'}</p>
             <div className="flex gap-2 mt-3">
-<button
-  onClick={() => {
-    const confirmMsg = user.arrivedForBus
-      ? 'Mark this camper as NOT arrived for the bus?'
-      : 'Mark this camper as arrived for the bus?';
-    if (window.confirm(confirmMsg)) {
-      toggleArrival(user._id, 'arrivedForBus');
-    }
-  }}
-  className={`px-3 py-1 rounded text-white ${user.arrivedForBus ? 'bg-green-600' : 'bg-gray-600'}`}
->
-  Bus: {user.arrivedForBus ? 'Yes' : 'No'}
-</button>
-<button
-  onClick={() => {
-    const confirmMsg = user.arrivedCampSite
-      ? 'Mark this camper as NOT arrived at the camp site?'
-      : 'Mark this camper as arrived at the camp site?';
-    if (window.confirm(confirmMsg)) {
-      toggleArrival(user._id, 'arrivedCampSite');
-    }
-  }}
-  className={`px-3 py-1 rounded text-white ${user.arrivedCampSite ? 'bg-green-600' : 'bg-gray-600'}`}
->
-  Camp: {user.arrivedCampSite ? 'Yes' : 'No'}
-</button>
+              <button onClick={() => toggleArrival(user._id, 'arrivedForBus')} className={`px-3 py-1 rounded text-white ${user.arrivedForBus ? 'bg-green-600' : 'bg-gray-600'}`}>
+                Bus: {user.arrivedForBus ? 'Yes' : 'No'}
+              </button>
+              <button onClick={() => toggleArrival(user._id, 'arrivedCampSite')} className={`px-3 py-1 rounded text-white ${user.arrivedCampSite ? 'bg-green-600' : 'bg-gray-600'}`}>
+                Camp: {user.arrivedCampSite ? 'Yes' : 'No'}
+              </button>
             </div>
             <button onClick={() => handleDelete(user._id)} className="mt-4 bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-300 w-full">
               Delete
@@ -236,7 +194,6 @@ const CampersList = () => {
             <input name="age" type="number" value={formData.age || ''} onChange={handleChange} placeholder="Age" className="w-full mb-2 p-2 border rounded" />
             <input name="phoneNumber" value={formData.phoneNumber || ''} onChange={handleChange} placeholder="Phone" className="w-full mb-2 p-2 border rounded" />
             <input name="school" value={formData.school || ''} onChange={handleChange} placeholder="School" className="w-full mb-2 p-2 border rounded" />
-            <input name="gender"value={formData.gender || ''} onChange={handleChange} placeholder="Gender" className="w-full mb-2 p-2 border rounded" />
             <input name="remarks" value={formData.remarks || ''} onChange={handleChange} placeholder="Remarks" className="w-full mb-2 p-2 border rounded" />
             <input name="team" value={formData.team || ''} onChange={handleChange} placeholder="Team" className="w-full mb-2 p-2 border rounded" />
             <input name="payment" type="number" value={formData.payment || ''} onChange={handleChange} placeholder="Payment" className="w-full mb-2 p-2 border rounded" />
